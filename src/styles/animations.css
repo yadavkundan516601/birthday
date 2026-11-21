@@ -1,0 +1,245 @@
+/* ============================================================================
+   Shared keyframes + helper classes. Everything here is plain CSS (GPU-friendly
+   transforms/opacity only) so the heavy lifting stays off the JS thread.
+   ========================================================================== */
+
+/* ── generic motion ────────────────────────────────────────────────────── */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes float-tilt {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-14px) rotate(3deg); }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes spin-rev { to { transform: rotate(-360deg); } }
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.55) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.1) rotate(22deg); }
+}
+@keyframes shimmer-text { to { background-position: 220% center; } }
+@keyframes gradient-pan {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes sheen {
+  0% { transform: translateX(-130%) skewX(-20deg); }
+  55%, 100% { transform: translateX(260%) skewX(-20deg); }
+}
+@keyframes btn-glow {
+  0%, 100% { box-shadow: 0 10px 30px -6px rgba(255, 80, 150, 0.55), 0 0 0 0 rgba(255, 140, 190, 0.5); }
+  50% { box-shadow: 0 14px 40px -4px rgba(255, 80, 150, 0.75), 0 0 0 12px rgba(255, 140, 190, 0); }
+}
+@keyframes caret-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+.animate-float-y { animation: float-y 5s ease-in-out infinite; }
+.animate-float-tilt { animation: float-tilt 6s ease-in-out infinite; }
+.animate-sway { animation: sway 4s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 40s linear infinite; }
+.animate-breathe { animation: breathe 4s ease-in-out infinite; }
+.animate-glow { animation: glow-pulse 3s ease-in-out infinite; }
+.bg-pan { background-size: 200% 200%; animation: gradient-pan 16s ease-in-out infinite; }
+
+/* ── rising / falling particles ────────────────────────────────────────── */
+@keyframes rise-fade {
+  0%   { transform: translate3d(0, 0, 0) scale(0.6) rotate(0deg); opacity: 0; }
+  12%  { opacity: 0.9; }
+  100% { transform: translate3d(var(--drift, 0px), -118vh, 0) scale(1.1) rotate(var(--rot, 0deg)); opacity: 0; }
+}
+.float-heart {
+  animation-name: rise-fade;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes balloon-rise {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(var(--drift, 0px), -150vh, 0); }
+}
+@keyframes balloon-sway {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+@keyframes balloon-bob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-16px) rotate(3deg); }
+}
+
+@keyframes petal-fall {
+  0%   { transform: translate3d(0, -14vh, 0); opacity: 0; }
+  8%   { opacity: 0.95; }
+  92%  { opacity: 0.95; }
+  100% { transform: translate3d(var(--drift, 0px), 112vh, 0); opacity: 0; }
+}
+@keyframes petal-spin {
+  0%   { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(360deg) rotateY(200deg) rotateZ(160deg); }
+}
+
+@keyframes firefly-move {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(var(--x1), var(--y1)); }
+  50% { transform: translate(var(--x2), var(--y2)); }
+  75% { transform: translate(var(--x3), var(--y3)); }
+}
+
+@keyframes crumb-fall {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--cx), var(--cy)) rotate(var(--cr)); opacity: 0; }
+}
+@keyframes smoke {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.5); }
+  20%  { opacity: 0.7; }
+  100% { opacity: 0; transform: translate(var(--sx, 6px), -70px) scale(1.8); }
+}
+@keyframes flame {
+  0%, 100% { transform: scale(1, 1) rotate(-2deg); }
+  25% { transform: scale(0.92, 1.1) rotate(2deg); }
+  50% { transform: scale(1.06, 0.94) rotate(-1deg); }
+  75% { transform: scale(0.95, 1.06) rotate(3deg); }
+}
+@keyframes flame-glow {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.12); }
+}
+@keyframes shooting-star {
+  0%   { transform: translate(0, 0) rotate(var(--angle, 28deg)); opacity: 0; }
+  8%   { opacity: 1; }
+  100% { transform: translate(var(--dx, 120vw), var(--dy, 60vh)) rotate(var(--angle, 28deg)); opacity: 0; }
+}
+@keyframes bulb-twinkle {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.35); }
+}
+
+.particles { pointer-events: none; }
+
+/* ── cute characters (teddy bears & pandas) ────────────────────────────── */
+.buddy { overflow: visible; }
+.buddy .buddy-body { transform-origin: 100px 238px; }
+.buddy .buddy-head { transform-origin: 100px 130px; }
+.buddy .arm { transform-origin: 0 0; }
+.buddy .blink { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite; }
+.buddy .held-sway { transform-box: fill-box; transform-origin: 50% 100%; animation: balloon-sway 3.2s ease-in-out infinite; }
+
+.buddy .arm-l { transform: rotate(var(--arm-l, 14deg)); }
+.buddy .arm-r { transform: rotate(var(--arm-r, -14deg)); }
+
+@keyframes blink {
+  0%, 91%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.08); }
+}
+@keyframes buddy-bounce {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  50% { transform: translateY(-8px) scale(0.985, 1.025); }
+}
+@keyframes buddy-breathe {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(1.012, 1.02); }
+}
+@keyframes buddy-dance {
+  0%   { transform: translate(0, 0) rotate(-4deg) scale(1.02, 0.97); }
+  25%  { transform: translate(0, -16px) rotate(0deg) scale(0.97, 1.05); }
+  50%  { transform: translate(0, 0) rotate(4deg) scale(1.02, 0.97); }
+  75%  { transform: translate(0, -16px) rotate(0deg) scale(0.97, 1.05); }
+  100% { transform: translate(0, 0) rotate(-4deg) scale(1.02, 0.97); }
+}
+@keyframes head-tilt {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+@keyframes head-bob {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(-2deg) translateY(1px); }
+}
+@keyframes arm-wave-r {
+  0%, 100% { transform: rotate(var(--arm-r)); }
+  50% { transform: rotate(calc(var(--arm-r) - 26deg)); }
+}
+@keyframes arm-wave-l {
+  0%, 100% { transform: rotate(var(--arm-l)); }
+  50% { transform: rotate(calc(var(--arm-l) + 26deg)); }
+}
+@keyframes arm-dance-l {
+  0%, 100% { transform: rotate(40deg); }
+  50% { transform: rotate(150deg); }
+}
+@keyframes arm-dance-r {
+  0%, 100% { transform: rotate(-150deg); }
+  50% { transform: rotate(-40deg); }
+}
+@keyframes arm-hug {
+  0%, 100% { transform: rotate(var(--arm-base)); }
+  50% { transform: rotate(calc(var(--arm-base) * 0.94)); }
+}
+
+.mood-idle .buddy-body { animation: buddy-bounce 3.4s ease-in-out infinite; }
+.mood-idle .buddy-head { animation: head-bob 4.2s ease-in-out infinite; }
+.mood-sit .buddy-body { animation: buddy-breathe 4s ease-in-out infinite; }
+.mood-sit .buddy-head { animation: head-bob 5s ease-in-out infinite; }
+.mood-wave .buddy-body { animation: buddy-bounce 2.8s ease-in-out infinite; }
+.mood-wave .buddy-head { animation: head-tilt 3.2s ease-in-out infinite; }
+.mood-wave .arm-r { animation: arm-wave-r 0.72s ease-in-out infinite; }
+.mood-dance .buddy-body { animation: buddy-dance 1s ease-in-out infinite; }
+.mood-dance .buddy-head { animation: head-tilt 1s ease-in-out infinite; }
+.mood-dance .arm-l { animation: arm-dance-l 1s ease-in-out infinite; }
+.mood-dance .arm-r { animation: arm-dance-r 1s ease-in-out infinite; }
+.mood-cheer .buddy-body { animation: buddy-dance 0.7s ease-in-out infinite; }
+.mood-cheer .buddy-head { animation: head-tilt 0.7s ease-in-out infinite; }
+.mood-cheer .arm-l { animation: arm-dance-l 0.7s ease-in-out infinite; }
+.mood-cheer .arm-r { animation: arm-dance-r 0.7s ease-in-out infinite; }
+
+/* ── glowing story button ──────────────────────────────────────────────── */
+.glow-btn { animation: btn-glow 2.8s ease-in-out infinite; }
+.glow-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  width: 40%;
+  animation: sheen 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── typewriter caret ──────────────────────────────────────────────────── */
+.tw-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: currentColor;
+  animation: caret-blink 0.9s steps(1) infinite;
+}
+
+/* ── respect reduced-motion preferences ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .particles { display: none !important; }
+  .glow-btn::after { display: none; }
+}
+
+/* characters holding something keep their arms still */
+.buddy.has-item .arm { animation: none !important; }

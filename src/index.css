@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@import "./styles/animations.css";
+
+@theme {
+  --font-sans: "Quicksand Variable", ui-rounded, "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+  --font-display: "Playfair Display Variable", Georgia, "Times New Roman", serif;
+  --font-script: "Dancing Script Variable", "Brush Script MT", cursive;
+
+  --color-baby: #ffd1e3;
+  --color-petal: #ffb6d5;
+  --color-blush: #ffe4ec;
+  --color-lilac: #e6d6ff;
+  --color-peach: #ffdcc8;
+  --color-rose: #ff6fa5;
+  --color-ink: #5b2a4c;
+  --color-ink-soft: #8a4a73;
+}
+
+:root {
+  color-scheme: light;
+  --ink: #5b2a4c;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: #ffd1e3;
+  color: var(--ink);
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Soft, readable "glass" card used for messages. */
+.glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.34));
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  box-shadow:
+    0 18px 50px -12px rgba(255, 105, 160, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+/* Gradient headline text. */
+.text-shine {
+  background: linear-gradient(100deg, #d6246e 0%, #ff4f93 28%, #9b4dff 55%, #ff4f93 78%, #d6246e 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-text 6s linear infinite;
+}
+
+/* In the components layer so Tailwind utilities (pt-14, pb-[20vh]…) can still refine it. */
+@layer components {
+  .safe-pad {
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+::selection {
+  background: rgba(255, 111, 165, 0.35);
+}
