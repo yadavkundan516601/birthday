@@ -18,6 +18,7 @@ export default function GlowButton({
   variant = "pink",
   disabled = false,
   burst = true,
+  hero = false, // the big "this is THE button" treatment: larger, ringed, bouncing
   className = "",
   ...rest
 }) {
@@ -41,7 +42,7 @@ export default function GlowButton({
     onClick?.(e);
   };
 
-  return (
+  const button = (
     <motion.button
       type="button"
       onClick={handleClick}
@@ -49,10 +50,21 @@ export default function GlowButton({
       whileHover={{ scale: 1.06, y: -2 }}
       whileTap={{ scale: 0.93 }}
       transition={{ type: "spring", stiffness: 420, damping: 18 }}
-      className={`glow-btn relative inline-flex min-h-14 select-none items-center justify-center gap-2 overflow-hidden rounded-full border border-white/60 px-8 py-3.5 text-[1.05rem] font-bold tracking-wide shadow-xl outline-none focus-visible:ring-4 focus-visible:ring-white/80 sm:px-10 sm:text-lg ${VARIANTS[variant]} ${className}`}
+      className={`glow-btn relative inline-flex select-none items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-white/80 font-bold tracking-wide shadow-xl outline-none focus-visible:ring-4 focus-visible:ring-white/80 ${
+        hero ? "min-h-[4.25rem] px-9 py-4 text-[1.2rem] sm:px-12 sm:text-xl" : "min-h-14 px-8 py-3.5 text-[1.05rem] sm:px-10 sm:text-lg"
+      } ${VARIANTS[variant]} ${className}`}
       {...rest}
     >
       <span className="relative z-10 drop-shadow-[0_1px_1px_rgba(120,20,70,0.25)]">{children}</span>
     </motion.button>
+  );
+
+  if (!hero) return button;
+  return (
+    <span className="relative inline-flex items-center justify-center" style={{ animation: "float-y 2.6s ease-in-out infinite" }}>
+      <span className="pointer-events-none absolute inset-0 rounded-full border-2 border-[#ff6fa5]" style={{ animation: "ring-out 2.2s ease-out infinite" }} />
+      <span className="pointer-events-none absolute inset-0 rounded-full border-2 border-[#ff9ec5]" style={{ animation: "ring-out 2.2s ease-out 1.1s infinite" }} />
+      {button}
+    </span>
   );
 }

@@ -35,7 +35,7 @@ export default function GalleryScene({ onNext }) {
       <FlowerCorner position="br" size={170} className="w-[28vw] max-w-[190px] h-auto" />
 
       <motion.div
-        className="safe-pad relative z-10 flex h-full flex-col items-center justify-between gap-1 pb-24 pt-12 text-center sm:pt-14"
+        className="safe-pad relative z-10 flex h-full flex-col items-center justify-between gap-1 pb-32 pt-12 text-center sm:pt-14"
         animate={leaving ? { opacity: 0, scale: 1.06 } : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.7 }}
       >
@@ -67,7 +67,9 @@ export default function GalleryScene({ onNext }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 1.8, type: "spring", stiffness: 220, damping: 15 }}
         >
-          <GlowButton onClick={go}>{config.texts.galleryButton}</GlowButton>
+          <GlowButton hero onClick={go}>
+            {config.texts.galleryButton}
+          </GlowButton>
         </motion.div>
       </motion.div>
     </div>
