@@ -17,6 +17,7 @@ export function MusicProvider({ children }) {
   const fadeRef = useRef(0);
   const wantedRef = useRef(false); // does the user want music right now?
   const startedRef = useRef(false);
+  const mutedByUserRef = useRef(false); // she turned it off herself – never auto-start again
   const [playing, setPlaying] = useState(false);
   const [available, setAvailable] = useState(musicAllowed);
 
@@ -45,7 +46,12 @@ export function MusicProvider({ children }) {
       setPlaying(true);
       fadeTo(config.music.volume, 1400);
     };
-    if (p && typeof p.then === "function") p.then(onStarted).catch(() => setPlaying(false));
+    if (p && typeof p.then === "function") p.then(onStarted).catch(() => {
+        // autoplay was blocked: forget the attempt so the next tap/key can start it
+        wantedRef.current = false;
+        startedRef.current = false;
+        setPlaying(false);
+      });
     else onStarted();
   }, [fadeTo]);
 
@@ -79,9 +85,33 @@ export function MusicProvider({ children }) {
     if (!musicAllowed) return;
     ensureAudio();
     startedRef.current = true;
-    if (wantedRef.current) pause();
-    else play();
+    if (wantedRef.current) {
+      mutedByUserRef.current = true;
+      pause();
+    } else {
+      mutedByUserRef.current = false;
+      play();
+    }
   }, [ensureAudio, pause, play]);
+
+  // Music is ON by default. Browsers only allow sound after a gesture, so try
+  // straight away and, if that is blocked, start on her very first tap/key.
+  // It never overrides her if she switched it off herself.
+  useEffect(() => {
+    if (!musicAllowed) return;
+    const events = ["pointerdown", "touchend", "keydown", "click"];
+    const ensurePlaying = () => {
+      if (mutedByUserRef.current) return;
+      const audio = audioRef.current;
+      if (!audio || audio.paused) {
+        startedRef.current = false;
+        start();
+      }
+    };
+    ensurePlaying();
+    events.forEach((e) => window.addEventListener(e, ensurePlaying, true));
+    return () => events.forEach((e) => window.removeEventListener(e, ensurePlaying, true));
+  }, [start]);
 
   // Be polite: pause when the tab is hidden, resume when she comes back.
   useEffect(() => {

@@ -58,7 +58,7 @@ const birthdayConfig = {
 
   // ── Scene 6 · the gallery ────────────────────────────────────────────────
   galleryMessage:
-    "Well... you didn't give me your photos, so here's you for now! 😂💗",
+    "Well... you didn't give me your photos, so here's you for now! Gadhi 😂💗",
 
   // These are placeholders (cute bunny + donkey!). Replace them with real
   // photos whenever you have them – see "HOW TO ADD PHOTOS" at the top.

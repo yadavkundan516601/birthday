@@ -152,7 +152,7 @@ export default function Carousel3D({ items, autoPlay = true, interval = 3600 }) 
   };
 
   return (
-    <div className="w-full select-none" style={{ "--cw": "min(64vw, 300px, 33dvh)" }}>
+    <div className="w-full select-none" style={{ "--cw": "min(64vw, 300px, 29dvh)" }}>
       <motion.div
         className="relative mx-auto w-full max-w-[720px] touch-pan-y"
         style={{ height: "calc(var(--cw) * 1.25 + 64px)", perspective: 1400 }}
